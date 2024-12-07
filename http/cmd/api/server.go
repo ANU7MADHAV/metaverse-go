@@ -9,6 +9,9 @@ func (app *application) routes() *gin.Engine {
 
 	{
 		v1.GET("/healthcheck", app.healthcheck)
+
+		v1.POST("/users/register", app.register)
+		v1.POST("/users/login", app.login)
 	}
 	return r
 }
