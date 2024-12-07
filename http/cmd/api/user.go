@@ -1,31 +1,14 @@
 package main
 
 import (
+	"metaverse/http/handlers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type UserType string
-
-const (
-	Admin UserType = "Admin"
-	User  UserType = "User"
-)
-
-type registerInput struct {
-	Username string   `json:"username"`
-	Password string   `json:"password"`
-	Type     UserType `jons:"type"`
-}
-
-type loginInput struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 func (app *application) register(c *gin.Context) {
-	var input registerInput
+	var input handlers.RegisterInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -35,7 +18,7 @@ func (app *application) register(c *gin.Context) {
 }
 
 func (app *application) login(c *gin.Context) {
-	var input loginInput
+	var input handlers.LoginInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
