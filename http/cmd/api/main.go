@@ -34,8 +34,6 @@ func main() {
 		logger: logger,
 	}
 
-	fmt.Println(app)
-
 	srv := http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
 		Handler:      app.routes(),
