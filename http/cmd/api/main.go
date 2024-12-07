@@ -18,6 +18,8 @@ type application struct {
 	logger *log.Logger
 }
 
+const version = "1.23"
+
 func main() {
 	var cfg config
 
@@ -34,11 +36,9 @@ func main() {
 
 	fmt.Println(app)
 
-	mux := http.NewServeMux()
-
 	srv := http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      mux,
+		Handler:      app.routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  time.Second,
 		WriteTimeout: time.Second,
