@@ -32,5 +32,13 @@ func (app *application) login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	c.JSON(http.StatusOK, gin.H{"user": "true"})
+	userModel := data.NewUserModel(app.db)
+
+	user, err := userModel.CheckUser(&input)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user.ID})
 }
