@@ -72,3 +72,24 @@ func (u *UserModel) Create(input *RegisterInput) error {
 
 	return u.db.Create(&user).Error
 }
+
+func (u *UserModel) CheckUser(input *LoginInput) (*User, error) {
+	if input.Username == "" || input.Password == "" {
+		return nil, errors.New("username and password are required")
+	}
+
+	var existingUser User
+
+	result := u.db.Where("username = ?", input.Username).First(&existingUser)
+
+	if result.Error != nil {
+		return nil, errors.New("username doesn't exist")
+	}
+
+	err := bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(input.Password))
+
+	if err != nil {
+		return nil, errors.New("invalid username or password")
+	}
+	return &existingUser, nil
+}
