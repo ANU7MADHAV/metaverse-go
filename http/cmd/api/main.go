@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"metaverse/http/internal/data"
 	"net/http"
 	"os"
 	"time"
@@ -65,6 +66,12 @@ func main() {
 		sqlDB.Close()
 	}()
 
+	err = migrateDatabase(db)
+
+	if err != nil {
+		logger.Println("migrations failed")
+	}
+
 	app := &application{
 		config: cfg,
 		logger: logger,
@@ -81,4 +88,10 @@ func main() {
 
 	err = srv.ListenAndServe()
 	logger.Fatal(err)
+}
+
+func migrateDatabase(db *gorm.DB) error {
+	return db.AutoMigrate(
+		&data.User{},
+	)
 }
